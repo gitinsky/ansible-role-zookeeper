@@ -1,0 +1,4 @@
+ZOO_LOG_DIR=/var/log/zookeeper
+export ZOO_LOG_DIR
+JAVA_HOME=/usr/java/jdk1.8.0_11
+export JAVA_HOME
