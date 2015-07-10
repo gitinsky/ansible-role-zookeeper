@@ -5,32 +5,32 @@
 - name: unpack Zookeeper
   command: bash -c "cd /opt && tar xzf /root/zookeeper-3.4.6.tar.gz" creates=/opt/zookeeper-3.4.6
 
-- name: create /opt/zookeeper
-  file: state=link src=/opt/zookeeper-3.4.6 dest=/opt/zookeeper
+- name: create {{ zookeeper_distr_prefix }}
+  shell: cp -r /opt/zookeeper-3.4.6 {{ zookeeper_distr_prefix }} creates={{ zookeeper_distr_prefix }}
 
 - name: add Zookeeper user
-  user: name=zookeeper shell=/usr/sbin/nologin state=present
+  user: name={{ zookeeper_user }} shell=/usr/sbin/nologin state=present
 
-- name: make /var/lib/zookeeper
-  file: path=/var/lib/zookeeper state=directory owner=zookeeper group=zookeeper mode=0700
+- name: make {{ zookeeper_var_prefix }}
+  file: path={{ zookeeper_var_prefix }} state=directory owner={{ zookeeper_user }} group={{ zookeeper_user }} mode=0700
 
-- name: make /opt/zookeeper/conf
-  file: path=/opt/zookeeper/conf state=directory owner=root group=root mode=0755
+- name: make {{ zookeeper_distr_prefix }}/conf
+  file: path={{ zookeeper_distr_prefix }}/conf state=directory owner=root group=root mode=0755
 
-- name: put /opt/zookeeper/conf/zoo.cfg
-  template: src=zookeeper/zoo.cfg dest=/opt/zookeeper/conf/zoo.cfg owner=root group=root mode=0644
+- name: put {{ zookeeper_distr_prefix }}/conf/zoo.cfg
+  template: src=zookeeper/zoo.cfg dest={{ zookeeper_distr_prefix }}/conf/zoo.cfg owner=root group=root mode=0644
 
-- name: put /opt/zookeeper/conf/zookeeper-env.sh
-  template: src=zookeeper/zookeeper-env.sh dest=/opt/zookeeper/conf/zookeeper-env.sh owner=root group=root mode=0644
+- name: put {{ zookeeper_distr_prefix }}/conf/zookeeper-env.sh
+  template: src=zookeeper/zookeeper-env.sh dest={{ zookeeper_distr_prefix }}/conf/zookeeper-env.sh owner=root group=root mode=0644
 
-- name: make /var/log/zookeeper
-  file: path=/var/log/zookeeper state=directory owner=zookeeper group=zookeeper mode=0700
+- name: make {{ zookeeper_log_prefix }}
+  file: path={{ zookeeper_log_prefix }} state=directory owner={{ zookeeper_user }} group={{ zookeeper_user }} mode=0700
 
-- name: put /var/lib/zookeeper/myid
-  template: src=zookeeper/myid dest=/var/lib/zookeeper/myid owner=root group=root mode=0644
+- name: put {{ zookeeper_var_prefix }}/myid
+  template: src=zookeeper/myid dest={{ zookeeper_var_prefix }}/myid owner=root group=root mode=0644
 
 - name: put zookeeper.rb eye config file
-  template: src=zookeeper/eye.rb dest=/etc/eye/zookeeper.rb owner=root group=root mode=0644
+  template: src=zookeeper/eye.rb dest=/etc/eye/zookeeper-{{ env_name }}.rb owner=root group=root mode=0644
 
 - name: load config in eye
   command: bash -c "source /usr/local/rvm/scripts/rvm && eye l /etc/eye/apps.eye"
