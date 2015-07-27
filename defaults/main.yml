@@ -1,0 +1,7 @@
+---
+zookeeper_max_client_cnxns: 300
+zookeeper_distr_prefix: /opt/zookeeper
+zookeeper_user: zookeeper
+zookeeper_var_prefix: /var/lib/zookeeper
+zookeeper_log_prefix: /var/log/zookeeper
+env_name: default
