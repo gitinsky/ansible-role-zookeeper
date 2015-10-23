@@ -5,3 +5,6 @@ zookeeper_user: zookeeper
 zookeeper_var_prefix: /var/lib/zookeeper
 zookeeper_log_prefix: /var/log/zookeeper
 env_name: default
+zookeeper_client_port: 2181
+zookeeper_peerport: 2888
+zookeeper_leaderport: 3888
