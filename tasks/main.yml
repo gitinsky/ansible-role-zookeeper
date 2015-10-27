@@ -1,6 +1,6 @@
 ---
 - name: download Zookeeper
-  command: bash -c "cd /root && wget http://mirrors.sonic.net/apache/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz" creates=/root/zookeeper-3.4.6.tar.gz
+  get_url: url=http://mirrors.sonic.net/apache/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz dest=/root/zookeeper-3.4.6.tar.gz
 
 - name: unpack Zookeeper
   command: bash -c "cd /opt && tar xzf /root/zookeeper-3.4.6.tar.gz" creates=/opt/zookeeper-3.4.6
@@ -18,19 +18,19 @@
   file: path={{ zookeeper_distr_prefix }}/conf state=directory owner=root group=root mode=0755
 
 - name: put {{ zookeeper_distr_prefix }}/conf/zoo.cfg
-  template: src=zookeeper/zoo.cfg dest={{ zookeeper_distr_prefix }}/conf/zoo.cfg owner=root group=root mode=0644
+  template: src=zookeeper/zoo.cfg dest={{ zookeeper_distr_prefix }}/conf/zoo.cfg owner=root group=root mode=0644 backup=yes
 
 - name: put {{ zookeeper_distr_prefix }}/conf/zookeeper-env.sh
-  template: src=zookeeper/zookeeper-env.sh dest={{ zookeeper_distr_prefix }}/conf/zookeeper-env.sh owner=root group=root mode=0644
+  template: src=zookeeper/zookeeper-env.sh dest={{ zookeeper_distr_prefix }}/conf/zookeeper-env.sh owner=root group=root mode=0644 backup=yes
 
 - name: make {{ zookeeper_log_prefix }}
   file: path={{ zookeeper_log_prefix }} state=directory owner={{ zookeeper_user }} group={{ zookeeper_user }} mode=0700
 
 - name: put {{ zookeeper_var_prefix }}/myid
-  template: src=zookeeper/myid dest={{ zookeeper_var_prefix }}/myid owner=root group=root mode=0644
+  template: src=zookeeper/myid dest={{ zookeeper_var_prefix }}/myid owner=root group=root mode=0644 backup=yes
 
 - name: put zookeeper.rb eye config file
-  template: src=zookeeper/eye.rb dest=/etc/eye/zookeeper-{{ env_name }}.rb owner=root group=root mode=0644
+  template: src=zookeeper/eye.rb dest=/etc/eye/zookeeper-{{ env_name }}.rb owner=root group=root mode=0644 backup=yes
 
 - name: load config in eye
   command: bash -c "source /usr/local/rvm/scripts/rvm && eye l /etc/eye/apps.eye"
