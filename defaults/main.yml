@@ -1,4 +1,5 @@
 ---
+zookeeper_java_home: /usr/lib/jvm/java-8-oracle
 zookeeper_max_client_cnxns: 300
 zookeeper_distr_prefix: /opt/zookeeper
 zookeeper_user: zookeeper

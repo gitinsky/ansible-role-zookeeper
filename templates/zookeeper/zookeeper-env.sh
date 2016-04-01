@@ -1,4 +1,4 @@
 ZOO_LOG_DIR={{ zookeeper_log_prefix }}
 export ZOO_LOG_DIR
-JAVA_HOME=/usr/lib/jvm/java-8-oracle
+JAVA_HOME={{ zookeeper_java_home }}
 export JAVA_HOME
