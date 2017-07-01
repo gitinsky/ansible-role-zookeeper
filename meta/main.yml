@@ -1,5 +1,6 @@
 ---
 dependencies:
-  - { role: eye }
+  - { role: eye, when: ansible_os_family != 'Elbrus' }
   - { role: java, when: ansible_os_family == 'Debian' }
   - { role: oracle-jdk, when: ansible_os_family == 'RedHat' }
+  - { role: runit, runit_service_name: "{{ zookeeper_runit }}",  runit_service_user: "{{ zookeeper_user }}", runit_service_command: "{{ zookeeper_distr_prefix }}/bin/{{ zookeeper_start }}", runit_service_params: "", runit_service_kill: "{{ zookeeper_kill }}", runit_allow_user_control: yes, tags: ['runit'], when: ansible_os_family == 'Elbrus' }

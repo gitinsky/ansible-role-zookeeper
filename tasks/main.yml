@@ -13,6 +13,11 @@
 
 - name: make {{ zookeeper_var_prefix }}
   file: path={{ zookeeper_var_prefix }} state=directory owner={{ zookeeper_user }} group={{ zookeeper_user }} mode=0700
+  when: ansible_os_family != 'Elbrus'
+
+- name: make {{ zookeeper_var_prefix }}
+  file: path={{ zookeeper_var_prefix }} state=directory owner={{ zookeeper_user }} group={{ zookeeper_user }}
+  when: ansible_os_family == 'Elbrus'
 
 - name: make {{ zookeeper_distr_prefix }}/conf
   file: path={{ zookeeper_distr_prefix }}/conf state=directory owner=root group=root mode=0755
@@ -23,15 +28,30 @@
 - name: put {{ zookeeper_distr_prefix }}/conf/zookeeper-env.sh
   template: src=zookeeper/zookeeper-env.sh dest={{ zookeeper_distr_prefix }}/conf/zookeeper-env.sh owner=root group=root mode=0644 backup=yes
 
+- name: put {{ zookeeper_distr_prefix }}/bin/{{ zookeeper_start }}
+  template: src=zookeeper_start.sh dest={{ zookeeper_distr_prefix }}/bin/{{ zookeeper_start }}
+  when: ansible_os_family == 'Elbrus'
+
+- name: put {{ zookeeper_distr_prefix }}/bin/{{ zookeeper_start }}
+  shell: chmod 0755 {{ zookeeper_distr_prefix }}/bin/{{ zookeeper_start }}
+  when: ansible_os_family == 'Elbrus'
+
 - name: make {{ zookeeper_log_prefix }}
   file: path={{ zookeeper_log_prefix }} state=directory owner={{ zookeeper_user }} group={{ zookeeper_user }} mode=0700
+  when: ansible_os_family != 'Elbrus'
+
+- name: make {{ zookeeper_log_prefix }}
+  file: path={{ zookeeper_log_prefix }} state=directory owner={{ zookeeper_user }} group={{ zookeeper_user }}
+  when: ansible_os_family == 'Elbrus'
 
 - name: put {{ zookeeper_var_prefix }}/myid
   template: src=zookeeper/myid dest={{ zookeeper_var_prefix }}/myid owner=root group=root mode=0644 backup=yes
 
 - name: put zookeeper.rb eye config file
   template: src=zookeeper/eye.rb dest=/etc/eye/zookeeper-{{ env_name }}.rb owner=root group=root mode=0644 backup=yes
+  when: ansible_os_family != 'Elbrus'
 
 - name: load config in eye
   command: bash -c "source /usr/local/rvm/scripts/rvm && eye l /etc/eye/apps.eye"
-  sudo: yes
+  become: yes
+  when: ansible_os_family != 'Elbrus'
