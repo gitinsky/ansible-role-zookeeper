@@ -1,0 +1,17 @@
+[Unit]
+Description=Zookeeper Service
+Documentation=https://github.com/kofonfor/ansible-role-zookeeper
+
+[Service]
+LimitNOFILE=65535
+Type=forking
+User={{ zookeeper_user }}
+Group={{ zookeeper_user }}
+ExecStart={{ zookeeper_distr_prefix }}/bin/zkServer.sh start
+StandardOutput=journal
+StandardError=journal
+Restart=always
+PIDFile={{ zookeeper_var_prefix }}/zookeeper_server.pid
+
+[Install]
+WantedBy=multi-user.target
