@@ -49,12 +49,12 @@
 
 - name: put zookeeper.rb eye config file
   template: src=zookeeper/eye.rb dest=/etc/eye/zookeeper-{{ env_name }}.rb owner=root group=root mode=0644 backup=yes
-  when: ansible_os_family != 'Elbrus' and "not (ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04')"
+  when: ansible_os_family != 'Elbrus' and (not (ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'))
 
 - name: load config in eye
   command: bash -c "source /usr/local/rvm/scripts/rvm && eye l /etc/eye/apps.eye"
   become: yes
-  when: ansible_os_family != 'Elbrus' and "not (ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04')"
+  when: ansible_os_family != 'Elbrus' and (not (ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'))
 
 - name: put systemd unit file to its destination
   template: src=zookeeper.service dest=/etc/systemd/system/zookeeper-{{ env_name }}.service owner=root group=root mode=0644
