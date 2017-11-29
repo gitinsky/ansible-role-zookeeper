@@ -1,12 +1,12 @@
 ---
 - name: download Zookeeper
-  get_url: url=http://mirrors.sonic.net/apache/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz dest=/root/zookeeper-3.4.6.tar.gz
+  get_url: url=http://mirrors.sonic.net/apache/zookeeper/zookeeper-{{ zookeeper_version }}/zookeeper-{{ zookeeper_version }}.tar.gz dest=/root/zookeeper-{{ zookeeper_version }}.tar.gz
 
-- name: unpack Zookeeper
-  command: bash -c "cd /opt && tar xzf /root/zookeeper-3.4.6.tar.gz" creates=/opt/zookeeper-3.4.6
+- name: unpack Zookeepr
+  unarchive: copy=no src="/root/zookeeper-{{ zookeeper_version }}.tar.gz" dest={{ zookeeper_unarchive_prefix }}
 
 - name: create {{ zookeeper_distr_prefix }}
-  shell: cp -r /opt/zookeeper-3.4.6 {{ zookeeper_distr_prefix }} creates={{ zookeeper_distr_prefix }}
+  shell: cp -r {{ zookeeper_unarchive_prefix }}/zookeeper-{{ zookeeper_version }} {{ zookeeper_distr_prefix }} creates={{ zookeeper_distr_prefix }}
 
 - name: add Zookeeper user
   user: name={{ zookeeper_user }} shell=/usr/sbin/nologin state=present

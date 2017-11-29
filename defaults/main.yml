@@ -1,4 +1,5 @@
 ---
+zookeeper_version: 3.4.11
 zookeeper_runit: zookeeper
 zookeeper_start: zookeeper_start.sh
 zookeeper_java_home: /usr/lib/jvm/java-8-oracle
@@ -11,3 +12,4 @@ env_name: default
 zookeeper_client_port: 2181
 zookeeper_peerport: 2888
 zookeeper_leaderport: 3888
+zookeeper_unarchive_prefix: /opt
