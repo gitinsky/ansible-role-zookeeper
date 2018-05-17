@@ -1,5 +1,5 @@
 ---
-zookeeper_version: 3.4.11
+zookeeper_version: 3.4.12
 zookeeper_runit: zookeeper
 zookeeper_start: zookeeper_start.sh
 zookeeper_java_home: /usr/lib/jvm/java-8-oracle
