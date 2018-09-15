@@ -23,10 +23,16 @@
   file: path={{ zookeeper_distr_prefix }}/conf state=directory owner=root group=root mode=0755
 
 - name: put {{ zookeeper_distr_prefix }}/conf/zoo.cfg
-  template: src=zookeeper/zoo.cfg dest={{ zookeeper_distr_prefix }}/conf/zoo.cfg owner=root group=root mode=0644 backup=yes
+  template: src=zoo.cfg dest={{ zookeeper_distr_prefix }}/conf/zoo.cfg owner=root group=root mode=0644 backup=yes
 
 - name: put {{ zookeeper_distr_prefix }}/conf/zookeeper-env.sh
-  template: src=zookeeper/zookeeper-env.sh dest={{ zookeeper_distr_prefix }}/conf/zookeeper-env.sh owner=root group=root mode=0644 backup=yes
+  template: src=zookeeper-env.sh dest={{ zookeeper_distr_prefix }}/conf/zookeeper-env.sh owner=root group=root mode=0644 backup=yes
+
+- name: put {{ zookeeper_distr_prefix }}/conf/jmx_prometheus_javaagent.yaml
+  template: src=jmx_prometheus_javaagent.yaml dest={{ zookeeper_distr_prefix }}/conf/jmx_prometheus_javaagent.yaml owner=root group=root mode=0644 backup=yes
+
+- name: download the Prom JMX exporter
+  get_url: url="https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.3.1/jmx_prometheus_javaagent-0.3.1.jar" dest={{ zookeeper_distr_prefix }}/lib/jmx_prometheus_javaagent-0.3.1.jar
 
 - name: put {{ zookeeper_distr_prefix }}/bin/{{ zookeeper_start }}
   template: src=zookeeper_start.sh dest={{ zookeeper_distr_prefix }}/bin/{{ zookeeper_start }}
