@@ -1,12 +1,14 @@
 ---
 - name: download Zookeeper
-  get_url: url=http://mirrors.sonic.net/apache/zookeeper/zookeeper-{{ zookeeper_version }}/zookeeper-{{ zookeeper_version }}.tar.gz dest=/root/zookeeper-{{ zookeeper_version }}.tar.gz
+  get_url:
+    url: http://mirrors.sonic.net/apache/zookeeper/zookeeper-{{ zookeeper_version }}/zookeeper-{{ zookeeper_version }}.tar.gz
+    dest: /root/zookeeper-{{ zookeeper_version }}.tar.gz
 
 - name: unpack Zookeepr
   unarchive: copy=no src="/root/zookeeper-{{ zookeeper_version }}.tar.gz" dest={{ zookeeper_unarchive_prefix }}
 
 - name: create {{ zookeeper_distr_prefix }}
-  shell: cp -r {{ zookeeper_unarchive_prefix }}/zookeeper-{{ zookeeper_version }} {{ zookeeper_distr_prefix }} creates={{ zookeeper_distr_prefix }}
+  command: cp -r {{ zookeeper_unarchive_prefix }}/zookeeper-{{ zookeeper_version }} {{ zookeeper_distr_prefix }} creates={{ zookeeper_distr_prefix }}
 
 - name: add Zookeeper user
   user: name={{ zookeeper_user }} shell=/usr/sbin/nologin state=present
@@ -32,14 +34,16 @@
   template: src=jmx_prometheus_javaagent.yaml dest={{ zookeeper_distr_prefix }}/conf/jmx_prometheus_javaagent.yaml owner=root group=root mode=0644 backup=yes
 
 - name: download the Prom JMX exporter
-  get_url: url="https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.3.1/jmx_prometheus_javaagent-0.3.1.jar" dest={{ zookeeper_distr_prefix }}/lib/jmx_prometheus_javaagent-0.3.1.jar
+  get_url:
+    url: "https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.3.1/jmx_prometheus_javaagent-0.3.1.jar"
+    dest: "{{ zookeeper_distr_prefix }}/lib/jmx_prometheus_javaagent-0.3.1.jar"
 
 - name: put {{ zookeeper_distr_prefix }}/bin/{{ zookeeper_start }}
   template: src=zookeeper_start.sh dest={{ zookeeper_distr_prefix }}/bin/{{ zookeeper_start }}
   when: ansible_os_family == 'Elbrus'
 
 - name: put {{ zookeeper_distr_prefix }}/bin/{{ zookeeper_start }}
-  shell: chmod 0755 {{ zookeeper_distr_prefix }}/bin/{{ zookeeper_start }}
+  command: chmod 0755 {{ zookeeper_distr_prefix }}/bin/{{ zookeeper_start }}
   when: ansible_os_family == 'Elbrus'
 
 - name: make {{ zookeeper_log_prefix }}
@@ -65,7 +69,7 @@
 - name: put systemd unit file to its destination
   template: src=zookeeper.service dest=/etc/systemd/system/zookeeper-{{ env_name }}.service owner=root group=root mode=0644
   when: "ansible_distribution == 'Ubuntu' and ansible_distribution_version|version_compare('16.04', '>=')"
-  notify: systemctl daemon-reload
+  notify: daemon-reload
 
 - name: enable zookeeper service
   service: name=zookeeper-{{ env_name }} enabled=yes state=started
