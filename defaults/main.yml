@@ -13,3 +13,6 @@ zookeeper_client_port: 2181
 zookeeper_peerport: 2888
 zookeeper_leaderport: 3888
 zookeeper_unarchive_prefix: /opt
+zookeeper_server_1_id: 1
+zookeeper_server_2_id: 2
+zookeeper_server_3_id: 3
